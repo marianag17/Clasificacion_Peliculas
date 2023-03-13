@@ -1,0 +1,54 @@
+﻿@model ClasificacionPeliculas.Models.personal_information
+
+@{
+    ViewData["Title"] = "Detalles de información personal";
+    string cityName = (string)ViewBag.cityName;
+}
+
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-6">
+            Ciudad
+        </dt>
+        <dd class = "col-sm-6">
+            @Html.DisplayFor(model => cityName)
+        </dd>
+        <dt class = "col-sm-6">
+            Nombre
+        </dt>
+        <dd class = "col-sm-6">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-6">
+            Fecha de Nacimiento
+        </dt>
+        <dd class = "col-sm-6">
+            @Html.DisplayFor(model => model.date_of_birth)
+        </dd>
+        <dt class = "col-sm-6">
+           Email 
+        </dt>
+        <dd class = "col-sm-6">
+            @Html.DisplayFor(model => model.email)
+        </dd>
+        <dt class = "col-sm-6">
+            Número de telefono
+        </dt>
+        <dd class = "col-sm-6">
+            @Html.DisplayFor(model => model.phone_number)
+        </dd>
+        <dt class = "col-sm-6">
+            Dirección
+        </dt>
+        <dd class = "col-sm-6">
+            @Html.DisplayFor(model => model.address)
+        </dd>
+    </dl>
+</div>
+<div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-danger">Regresar</a>
+    </div>
+</div>

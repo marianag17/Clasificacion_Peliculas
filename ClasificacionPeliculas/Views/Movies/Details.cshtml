@@ -1,0 +1,82 @@
+﻿@model ClasificacionPeliculas.Models.Movie
+
+@{
+    ViewData["Title"] = "Detalles de la película";
+}
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-6">
+                            Título
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Title)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Fecha de lanzamiento
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.ReleaseDate)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Duración (min)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Duration)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Director(es)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Director)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Actor(es)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Actors)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Trama
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Plot)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Calificación
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Rating)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Votos
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Votes)
+                        </dd>
+                        <dt class="col-sm-6">
+                            Url de Poster
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.PosterUrl)
+                        </dd>
+                        <dt class="col-sm-6">
+                            IMDB ID
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.ImdbId)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

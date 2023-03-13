@@ -1,0 +1,96 @@
+﻿@model ClasificacionPeliculas.Models.personal_information
+
+@{
+    ViewData["Title"] = "Create";
+    List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
+}
+
+
+<h4>Información personal</h4>
+<hr />
+<div class="row">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="control-label">Departamento</p>
+                    @*<select asp-for="geonameidCity" asp-items="items" class="form-control" onchange="MovieChanged('@Url.Action("GetMovieJson", "Movies")');"></select>*@
+                    @Html.DropDownList("region",items, new {@class = "form-control", id="region"})
+                    <span asp-validation-for="geonameidCity" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <p class="control-label">Ciudad</p>
+                    <select id="geonameidCity" asp-for="geonameidCity" asp-items="items" class="form-control"></select>
+                    <span asp-validation-for="geonameidCity" class="text-danger"></span>
+                </div>
+            </div>
+       
+            <div class="form-group">
+                <p class="control-label">Nombre</p>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p class="control-label">Fecha de Nacimiento</p>
+                <input asp-for="date_of_birth" class="form-control" />
+                <span asp-validation-for="date_of_birth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p class="control-label">Email</p>
+                <input asp-for="email" class="form-control" />
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p class="control-label">Número de telefono</p>
+                <input asp-for="phone_number" class="form-control" />
+                <span asp-validation-for="phone_number" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p class="control-label">Dirección</p>
+                <input asp-for="address" class="form-control" />
+                <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+            <hr />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+<hr />
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    var cboCitys = document.getElementById("region");
+    cboCitys.addEventListener("change",refresh);
+    refresh();
+    function refresh(){
+        fetch("@Url.Content("~/personal_information/citys")" + "?regi=" + cboCitys.value)
+        .then(function (result){
+            if(result.ok){
+                return result.json();
+            }
+        })
+        .then(function (data){
+            console.log(data);
+            cbo = document.getElementById("geonameidCity");
+            cbo.innerHTML = "";
+            data.forEach(function(element){
+                    
+                    let opt = document.createElement("option");
+                    opt.appendChild(document.createTextNode(element.text));
+                    opt.value = element.value;
+
+                    cbo.appendChild(opt)
+            })
+
+        })
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
