@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using ClasificacionPeliculasModel;
-using ClasificacionPeliculas.Models;
 
 namespace ClasificacionPeliculas.Models;
 
@@ -19,24 +17,23 @@ public partial class MoviesContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<City> Cities { get; set; }
+
+    public virtual DbSet<Country> Countries { get; set; }
+
     public virtual DbSet<Movie> Movies { get; set; }
 
     public virtual DbSet<Moviescategory> Moviescategories { get; set; }
-    public virtual DbSet<region> region { get; set; }
-    public virtual DbSet<city> city { get; set; }
+
+    //public virtual DbSet<PersonalInformation> PersonalInformations { get; set; }
+
+    public virtual DbSet<Region> Regions { get; set; }
+
+    public virtual DbSet<Vote> Votes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json")
-                        .Build();
-            var connectionString = configuration.GetConnectionString("DBMovies");
-            optionsBuilder.UseMySQL(connectionString);
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySQL("server=127.0.0.1;userid=root;password=mariana1703;database=movies;Pooling=False;TreatTinyAsBoolean=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,6 +47,101 @@ public partial class MoviesContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<City>(entity =>
+        {
+            entity.HasKey(e => e.Geonameid).HasName("PRIMARY");
+
+            entity.ToTable("city");
+
+            entity.HasIndex(e => e.GeonameidRegion, "FK_GEONAMEIDREGION_WCITY_W_REGION");
+
+            entity.HasIndex(e => new { e.Geonameid, e.GeonameidRegion }, "UK_GEONAMEID_GEONAMEIDREGION_W_CITY").IsUnique();
+
+            entity.Property(e => e.Geonameid).HasColumnName("geonameid");
+            entity.Property(e => e.GeonameidRegion).HasColumnName("geonameidRegion");
+            entity.Property(e => e.Latitude)
+                .HasPrecision(15, 8)
+                .HasColumnName("latitude");
+            entity.Property(e => e.Longitude)
+                .HasPrecision(15, 8)
+                .HasColumnName("longitude");
+            entity.Property(e => e.Name)
+                .HasMaxLength(64)
+                .HasColumnName("name");
+            entity.Property(e => e.Population).HasColumnName("population");
+            entity.Property(e => e.Timecreated)
+                .HasColumnType("datetime")
+                .HasColumnName("timecreated");
+            entity.Property(e => e.Timemodified)
+                .HasColumnType("datetime")
+                .HasColumnName("timemodified");
+            entity.Property(e => e.Userlastmodified)
+                .HasMaxLength(32)
+                .HasColumnName("userlastmodified");
+
+            entity.HasOne(d => d.GeonameidRegionNavigation).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.GeonameidRegion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_GEONAMEIDREGION_WCITY_W_REGION");
+        });
+
+        modelBuilder.Entity<Country>(entity =>
+        {
+            entity.HasKey(e => e.Geonameid).HasName("PRIMARY");
+
+            entity.ToTable("country");
+
+            entity.HasIndex(e => e.Alpha2Code, "UK_ALPHA2CODE_W_COUNTRY").IsUnique();
+
+            entity.HasIndex(e => e.Alpha3Code, "UK_ALPHA3CODE_W_COUNTRY").IsUnique();
+
+            entity.HasIndex(e => e.Name, "UK_NAME_W_COUNTRY").IsUnique();
+
+            entity.Property(e => e.Geonameid).HasColumnName("geonameid");
+            entity.Property(e => e.Alpha2Code)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("alpha2Code");
+            entity.Property(e => e.Alpha3Code)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("alpha3Code");
+            entity.Property(e => e.Capital)
+                .HasMaxLength(64)
+                .HasColumnName("capital");
+            entity.Property(e => e.Demonym)
+                .HasMaxLength(64)
+                .HasColumnName("demonym");
+            entity.Property(e => e.FlagUrl)
+                .HasColumnType("text")
+                .HasColumnName("flag_url");
+            entity.Property(e => e.Name)
+                .HasMaxLength(64)
+                .HasColumnName("name");
+            entity.Property(e => e.Neighbours)
+                .HasColumnType("text")
+                .HasColumnName("neighbours");
+            entity.Property(e => e.NumericCode)
+                .HasMaxLength(15)
+                .HasColumnName("numericCode");
+            entity.Property(e => e.Population).HasColumnName("population");
+            entity.Property(e => e.Region)
+                .HasMaxLength(32)
+                .HasColumnName("region");
+            entity.Property(e => e.Subregion)
+                .HasMaxLength(64)
+                .HasColumnName("subregion");
+            entity.Property(e => e.Timecreated)
+                .HasColumnType("datetime")
+                .HasColumnName("timecreated");
+            entity.Property(e => e.Timemodified)
+                .HasColumnType("datetime")
+                .HasColumnName("timemodified");
+            entity.Property(e => e.Userlastmodified)
+                .HasMaxLength(32)
+                .HasColumnName("userlastmodified");
         });
 
         modelBuilder.Entity<Movie>(entity =>
@@ -91,35 +183,119 @@ public partial class MoviesContext : DbContext
 
         modelBuilder.Entity<Moviescategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => new { e.Movie_Id, e.Category_Id }).HasName("PRIMARY");
 
             entity.ToTable("moviescategories");
 
-            entity.HasIndex(e => e.CategoryId, "category_id");
+            entity.HasIndex(e => e.Category_Id, "category_id");
 
-            entity.HasIndex(e => e.MovieId, "movie_id");
-
+            entity.Property(e => e.Movie_Id).HasColumnName("movie_id");
+            entity.Property(e => e.Category_Id).HasColumnName("category_id");
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CategoryId).HasColumnName("category_id");
-            entity.Property(e => e.MovieId).HasColumnName("movie_id");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Moviescategories)
-                .HasForeignKey(d => d.CategoryId)
+                .HasForeignKey(d => d.Category_Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("moviescategories_ibfk_2");
 
             entity.HasOne(d => d.Movie).WithMany(p => p.Moviescategories)
-                .HasForeignKey(d => d.MovieId)
+                .HasForeignKey(d => d.Movie_Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("moviescategories_ibfk_1");
         });
 
+        //modelBuilder.Entity<PersonalInformation>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+        //    entity.ToTable("personal_information");
+
+        //    entity.HasIndex(e => e.GeonameidCity, "FK_GEONAMEIDCITY_WCITY_personal_information");
+
+        //    entity.Property(e => e.Id).HasColumnName("id");
+        //    entity.Property(e => e.Address)
+        //        .HasMaxLength(255)
+        //        .HasColumnName("address");
+        //    entity.Property(e => e.DateOfBirth)
+        //        .HasColumnType("date")
+        //        .HasColumnName("date_of_birth");
+        //    entity.Property(e => e.Email)
+        //        .HasMaxLength(255)
+        //        .HasColumnName("email");
+        //    entity.Property(e => e.GeonameidCity).HasColumnName("geonameidCity");
+        //    entity.Property(e => e.Name)
+        //        .HasMaxLength(255)
+        //        .HasColumnName("name");
+        //    entity.Property(e => e.PhoneNumber)
+        //        .HasMaxLength(20)
+        //        .HasColumnName("phone_number");
+        //    //entity.HasOne(d => d.GeonameidCityNavigation).WithMany(p => p.PersonalInformations)
+        //    //    .HasForeignKey(d => d.GeonameidCity)
+        //    //    .OnDelete(DeleteBehavior.ClientSetNull)
+        //    //    .HasConstraintName("FK_GEONAMEIDCITY_WCITY_personal_information");
+        //});
+
+        modelBuilder.Entity<Region>(entity =>
+        {
+            entity.HasKey(e => e.Geonameid).HasName("PRIMARY");
+
+            entity.ToTable("region");
+
+            entity.HasIndex(e => e.GeonameidCountry, "FK_GEONAMEIDCOUNTRY_W_REGION_W_COUNTRY");
+
+            entity.HasIndex(e => new { e.Geonameid, e.GeonameidCountry }, "UK_GEONAMEID_GEONAMEIDCOUNTRY_W_REGION").IsUnique();
+
+            entity.Property(e => e.Geonameid).HasColumnName("geonameid");
+            entity.Property(e => e.GeonameidCountry).HasColumnName("geonameidCountry");
+            entity.Property(e => e.Latitude)
+                .HasPrecision(15, 8)
+                .HasColumnName("latitude");
+            entity.Property(e => e.Longitude)
+                .HasPrecision(15, 8)
+                .HasColumnName("longitude");
+            entity.Property(e => e.Name)
+                .HasMaxLength(128)
+                .HasColumnName("name");
+            entity.Property(e => e.Name2)
+                .HasMaxLength(128)
+                .HasColumnName("name2");
+
+            entity.HasOne(d => d.GeonameidCountryNavigation).WithMany(p => p.Regions)
+                .HasForeignKey(d => d.GeonameidCountry)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_GEONAMEIDCOUNTRY_W_REGION_W_COUNTRY");
+        });
+
+        //modelBuilder.Entity<Vote>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+        //    entity.ToTable("votes");
+
+        //    entity.HasIndex(e => e.Pi_Id, "FK_PI_VOTES");
+
+        //    entity.HasIndex(e => e.Movies_Id, "FK_movies_votes");
+
+        //    entity.Property(e => e.Id).HasColumnName("ID");
+        //    entity.Property(e => e.Movies_Id).HasColumnName("MOVIES_ID");
+        //    entity.Property(e => e.Pi_Id).HasColumnName("PI_ID");
+        //    entity.Property(e => e.RowCreationTime)
+        //        .HasColumnType("datetime")
+        //        .HasColumnName("ROW_CREATION_TIME");
+
+        //    entity.HasOne(d => d.Movies).WithMany(p => p.VotesNavigation)
+        //        .HasForeignKey(d => d.Movies_Id)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_movies_votes");
+
+        //    entity.HasOne(d => d.Pi).WithMany(p => p.Votes)
+        //        .HasForeignKey(d => d.Pi_Id)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_PI_VOTES");
+        //});
+
         OnModelCreatingPartial(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
     public DbSet<ClasificacionPeliculas.Models.personal_information> personal_information { get; set; } = default!;
-
-   
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

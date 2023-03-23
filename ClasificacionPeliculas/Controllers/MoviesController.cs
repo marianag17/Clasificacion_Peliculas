@@ -68,8 +68,8 @@ namespace ClasificacionPeliculas.Controllers
                     Director = movie.Director,
                     Actors = movie.Actors,
                     Plot = movie.Plot,
-                    Rating = movie.Rating,
-                    Votes = movie.Votes,
+                    Rating = Convert.ToDecimal(movie.Rating),
+                    Votes = Convert.ToInt32(movie.Votes),
                     PosterUrl = movie.PosterUrl,
                     ImdbId = movie.ImdbId,
                 };

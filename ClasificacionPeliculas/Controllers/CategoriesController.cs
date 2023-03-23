@@ -9,7 +9,7 @@ namespace ClasificacionPeliculas.Controllers
         {
             MoviesContext _moviesContext = new MoviesContext();
             IEnumerable<ClasificacionPeliculasModel.Category> categories = (from c in _moviesContext.Categories
-                                                                                //join mc in _moviesContext.Moviescategories on c.Id equals mc.CategoryId
+                                                                                //join mc in _moviesContext.Moviescategories on c.Id equals mc.Category_Id
                                                                                 //where c.Id == 0
                                                                             select new ClasificacionPeliculasModel.Category
                                                                             {

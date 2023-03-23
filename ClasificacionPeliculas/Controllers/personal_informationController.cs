@@ -45,27 +45,27 @@ namespace ClasificacionPeliculas.Controllers
             {
                 return NotFound();
             }
-            var city = await _context.city.FindAsync(personal_information.geonameidCity);
-            ViewBag.cityName = city.name;
+            var city = await _context.Cities.FindAsync(personal_information.geonameidCity);
+            ViewBag.cityName = city.Name;
             return View(personal_information);
         }
 
         // GET: personal_information/Create
         public IActionResult Create()
         {
-            List<region> regions = (from rg in _context.region
-                                    select new region
+            List<ClasificacionPeliculas.Models.Region> regions = (from rg in _context.Regions
+                                    select new ClasificacionPeliculas.Models.Region
                                     {
-                                        geonameid = rg.geonameid,
-                                        name = rg.name
+                                        Geonameid = rg.Geonameid,
+                                        Name = rg.Name
                                     }).ToList();
 
             List<SelectListItem> items = regions.ConvertAll(d =>
             {
                 return new SelectListItem()
                 {
-                    Text = d.name,
-                    Value = d.geonameid.ToString(),
+                    Text = d.Name,
+                    Value = d.Geonameid.ToString(),
                     Selected = false
                 };
             });
@@ -78,12 +78,12 @@ namespace ClasificacionPeliculas.Controllers
         public JsonResult citys(int regi)
         {
             List<ElementJsonIntKey> lst = new List<ElementJsonIntKey>();
-            lst = (from ct in _context.city
-                                  where ct.geonameidRegion == regi
+            lst = (from ct in _context.Cities
+                                  where ct.GeonameidRegion == regi
                                   select new ElementJsonIntKey
                                   {
-                                        Value = ct.geonameid,
-                                        Text = ct.name
+                                        Value = Convert.ToInt32(ct.Geonameid),
+                                        Text = ct.Name
                                     }).ToList();
             return Json(lst);
         }
@@ -128,23 +128,23 @@ namespace ClasificacionPeliculas.Controllers
                 return NotFound();
             }
 
-            var city = await _context.city.FindAsync(personal_information.geonameidCity);
+            var city = await _context.Cities.FindAsync(personal_information.geonameidCity);
             if (city == null) { return NotFound(); }
 
-            List<region> regions = (from rg in _context.region
-                                    select new region
+            List<ClasificacionPeliculas.Models.Region> regions = (from rg in _context.Regions
+                                    select new ClasificacionPeliculas.Models.Region
                                     {
-                                        geonameid = rg.geonameid,
-                                        name = rg.name
+                                        Geonameid = rg.Geonameid,
+                                        Name = rg.Name
                                     }).ToList();
 
             List<SelectListItem> items = regions.ConvertAll(d =>
             {
                 return new SelectListItem()
                 {
-                    Text = d.name,
-                    Value = d.geonameid.ToString(),
-                    Selected = (d.geonameid == city.geonameidRegion) ? true : false
+                    Text = d.Name,
+                    Value = d.Geonameid.ToString(),
+                    Selected = (d.Geonameid == city.GeonameidRegion) ? true : false
                 };
             });
 

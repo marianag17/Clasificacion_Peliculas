@@ -1,21 +1,29 @@
-﻿using NuGet.Protocol.Plugins;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
-namespace ClasificacionPeliculas.Models
+namespace ClasificacionPeliculas.Models;
+
+public partial class City
 {
-    public class city
-    {
-        [Key]
-        public int  geonameid { get; set; }
-        public int geonameidRegion { get; set; }
-        public string name { get; set; } 
-        public decimal? longitude { get; set; }
-        public decimal? latitude { get; set; }
-        public int? population { get; set; }
-        public string userlastmodified { get; set; }
-        public DateTime timecreated { get; set; }
-        public DateTime? timemodified { get; set; }
-    }
+    public long Geonameid { get; set; }
+
+    public long GeonameidRegion { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public decimal? Longitude { get; set; }
+
+    public decimal? Latitude { get; set; }
+
+    public long? Population { get; set; }
+
+    public string Userlastmodified { get; set; } = null!;
+
+    public DateTime Timecreated { get; set; }
+
+    public DateTime? Timemodified { get; set; }
+
+    public virtual Region GeonameidRegionNavigation { get; set; } = null!;
+
+    public virtual ICollection<personal_information> PersonalInformations { get; } = new List<personal_information>();
 }

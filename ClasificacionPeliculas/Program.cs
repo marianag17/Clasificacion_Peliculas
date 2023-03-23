@@ -1,8 +1,13 @@
+using ClasificacionPeliculas.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<MoviesContext>(options => options.UseMySQL("server=127.0.0.1;userid=root;password=mariana1703;database=movies;Pooling=False;TreatTinyAsBoolean=False;"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -12,8 +12,8 @@ namespace ClasificacionPeliculasModel
         public int Id { get; set; }
         public string? MovieName { get; set; }
         public string? CategoryName { get; set; }
-        public int? CategoryId { get; set; }
-        public int? MovieId { get; set; }
+        public int? Category_Id { get; set; }
+        public int? Movie_Id { get; set; }
         public List<SelectListItem>? Movies { get; set; }
         public List<SelectListItem>? Categories { get; set; }
         public Movie Movie { get; set; }      

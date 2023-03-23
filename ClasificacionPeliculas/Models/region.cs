@@ -1,17 +1,23 @@
-﻿using NuGet.Protocol.Plugins;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System;
+using System.Collections.Generic;
 
-namespace ClasificacionPeliculas.Models
+namespace ClasificacionPeliculas.Models;
+
+public partial class Region
 {
-    public class region
-    {
-        [Key]
-        public int geonameid {  get; set; }
-       public int geonameidCountry { get; set; }
-       public string? name { get; set; } = null!;
-       public string? name2 { get; set; } = null!;
-       public decimal longitude { get; set; }
-       public decimal latitude { get; set; }
-    }
+    public long Geonameid { get; set; }
+
+    public long GeonameidCountry { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public string? Name2 { get; set; }
+
+    public decimal? Longitude { get; set; }
+
+    public decimal? Latitude { get; set; }
+
+    public virtual ICollection<City> Cities { get; } = new List<City>();
+
+    public virtual Country GeonameidCountryNavigation { get; set; } = null!;
 }

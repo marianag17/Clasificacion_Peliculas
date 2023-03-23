@@ -3,25 +3,35 @@ using ClasificacionPeliculasModel;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClasificacionPeliculas.Controllers
 {
     public class MoviescategoryController : Controller
     {
-        public IActionResult Index()
+        private readonly MoviesContext _context;
+
+        public MoviescategoryController()
+        {
+            _context = new MoviesContext();
+        }
+        public async Task<IActionResult> Index()
         {
             MoviesContext _moviesContext = new MoviesContext();
             IEnumerable<ClasificacionPeliculasModel.Moviescategory> moviescategories =
                 (from mc in _moviesContext.Moviescategories
-                 join m in _moviesContext.Movies on mc.MovieId equals m.Id
-                 join c in _moviesContext.Categories on mc.CategoryId equals c.Id
+                 join m in _moviesContext.Movies on mc.Movie_Id equals m.Id
+                 join c in _moviesContext.Categories on mc.Category_Id
+                 equals c.Id
                  select new ClasificacionPeliculasModel.Moviescategory
                  {
-                     Id = mc.Id,
+                     Id = Convert.ToInt32(mc.Id),
                      MovieName = m.Title,
                      CategoryName = c.Name
                  }).ToList();
             return View(moviescategories);
+
+
         }
 
         public IActionResult Create()
@@ -66,12 +76,12 @@ namespace ClasificacionPeliculas.Controllers
             return View(moviescategory);
         }
         [HttpPost]
-        public IActionResult Create(int MovieId, int CategoryId)
+        public IActionResult Create(int MovieId, int Category_Id)
         {
             Models.Moviescategory moviescategory = new Models.Moviescategory
             {
-                MovieId = MovieId,
-                CategoryId = CategoryId
+                Movie_Id = MovieId,
+                Category_Id = Category_Id
             };
             MoviesContext _moviesContext = new MoviesContext();
             _moviesContext.Moviescategories.Add(moviescategory);
@@ -85,9 +95,9 @@ namespace ClasificacionPeliculas.Controllers
             Models.Moviescategory moviescategory = _moviesContext.Moviescategories.FirstOrDefault(s => s.Id == id);
             ClasificacionPeliculasModel.Moviescategory CPMmoviescategory = new ClasificacionPeliculasModel.Moviescategory
             {
-                CategoryId = moviescategory.CategoryId,
-                MovieId = moviescategory.MovieId,
-                Id = moviescategory.Id
+                Category_Id = moviescategory.Category_Id,
+                Movie_Id = moviescategory.Movie_Id,
+                Id = Convert.ToInt32(moviescategory.Id)
             };
             IEnumerable<ClasificacionPeliculasModel.Movie> movies = (from mc in _moviesContext.Movies
                                                                      select new ClasificacionPeliculasModel.Movie
@@ -106,23 +116,23 @@ namespace ClasificacionPeliculas.Controllers
             {
                 Value = s.Id.ToString(),
                 Text = s.Name,
-                Selected = (s.Id == CPMmoviescategory.CategoryId)
+                Selected = (s.Id == CPMmoviescategory.Category_Id)
             }).ToList();
             ViewBag.Movies = movies.Select(s => new SelectListItem()
             {
                 Value = s.Id.ToString(),
                 Text = s.Title,
-                Selected = (s.Id == CPMmoviescategory.MovieId)
+                Selected = (s.Id == CPMmoviescategory.Movie_Id)
             }).ToList();
             return View(CPMmoviescategory);
         }
         [HttpPost]
-        public IActionResult Edit(int Id, int MovieId, int CategoryId)
+        public IActionResult Edit(int Id, int MovieId, int Category_Id)
         {
             MoviesContext _moviesContext = new MoviesContext();
             Models.Moviescategory moviescategory = _moviesContext.Moviescategories.FirstOrDefault(s => s.Id == Id);
-            moviescategory.CategoryId = CategoryId;
-            moviescategory.MovieId = MovieId;
+            moviescategory.Category_Id = Category_Id;
+            moviescategory.Movie_Id = MovieId;
             _moviesContext.Moviescategories.Update(moviescategory);
             _moviesContext.SaveChanges();
             return RedirectToAction("Index");
@@ -133,9 +143,9 @@ namespace ClasificacionPeliculas.Controllers
             Models.Moviescategory moviescategory = _moviesContext.Moviescategories.FirstOrDefault(s => s.Id == id);
             ClasificacionPeliculasModel.Moviescategory CPMmoviescategory = new ClasificacionPeliculasModel.Moviescategory
             {
-                CategoryId = moviescategory.CategoryId,
-                MovieId = moviescategory.MovieId,
-                Id = moviescategory.Id
+                Category_Id = moviescategory.Category_Id,
+                Movie_Id = moviescategory.Movie_Id,
+                Id = Convert.ToInt32(moviescategory.Id)
             };
             IEnumerable<ClasificacionPeliculasModel.Movie> movies = (from mc in _moviesContext.Movies
                                                                      select new ClasificacionPeliculasModel.Movie
@@ -154,13 +164,13 @@ namespace ClasificacionPeliculas.Controllers
             {
                 Value = s.Id.ToString(),
                 Text = s.Name,
-                Selected = (s.Id == CPMmoviescategory.CategoryId)
+                Selected = (s.Id == CPMmoviescategory.Category_Id)
             }).ToList();
             CPMmoviescategory.Movies = movies.Select(s => new SelectListItem()
             {
                 Value = s.Id.ToString(),
                 Text = s.Title,
-                Selected = (s.Id == CPMmoviescategory.MovieId)
+                Selected = (s.Id == CPMmoviescategory.Movie_Id)
             }).ToList();
             return View(CPMmoviescategory);
         }

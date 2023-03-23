@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JX9Yy6f4IF5DFTdcGdQXiEGbMnLBFOvVq/kMUKkfJYrDpc5Zc0ywlDTP3tKRPyuCCccKkq6ZDTQuf9kUKua4pw==",
+  "dgSpecHash": "FWXw2pScO2ducLz44QD6cxFSO9HG4qLJxmSfYJH0aw4gBUDEc3sNTiznwa3pjT1uyNKoAWkKDkfdwk/yATsdjg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\maria\\OneDrive\\Documentos\\ClasificacionPeliculas\\ClasificacionPeliculasModel\\ClasificacionPeliculasModel.csproj",
+  "projectFilePath": "C:\\Users\\maria\\OneDrive\\Escritorio\\URL\\PRIMER CICLO 2023\\Programación web\\Clasificacion_Peliculas\\ClasificacionPeliculasModel\\ClasificacionPeliculasModel.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\maria\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.2.0\\microsoft.aspnetcore.antiforgery.2.2.0.nupkg.sha512",
     "C:\\Users\\maria\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

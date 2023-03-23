@@ -13,19 +13,21 @@ public partial class Movie
 
     public int Duration { get; set; }
 
-    public string? Director { get; set; }
+    public string Director { get; set; } = null!;
 
-    public string? Actors { get; set; }
+    public string Actors { get; set; } = null!;
 
-    public string? Plot { get; set; }
+    public string Plot { get; set; } = null!;
 
-    public decimal? Rating { get; set; }
+    public decimal Rating { get; set; }
 
-    public int? Votes { get; set; }
+    public int Votes { get; set; }
 
-    public string? PosterUrl { get; set; }
+    public string PosterUrl { get; set; } = null!;
 
-    public string? ImdbId { get; set; }
+    public string ImdbId { get; set; } = null!;
 
     public virtual ICollection<Moviescategory> Moviescategories { get; } = new List<Moviescategory>();
+
+    public virtual ICollection<Vote> VotesNavigation { get; } = new List<Vote>();
 }

@@ -13,13 +13,13 @@
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-sm-12">
                                 <p class="control-label">Película</p>
-                                <select asp-for="MovieId" asp-items="@ViewBag.Movies" class="form-control"></select>
-                                <span asp-validation-for="MovieId" class="text-danger"></span>
+                                <select asp-for="Movie_Id" asp-items="@ViewBag.Movies" class="form-control"></select>
+                                <span asp-validation-for="Movie_Id" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 col-lg-6 col-sm-12">
                                 <p class="control-label">Categoría</p>
-                                <select asp-for="CategoryId" asp-items="@Model.Categories" class="form-control"></select>
-                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                <select asp-for="Category_Id" asp-items="@Model.Categories" class="form-control"></select>
+                                <span asp-validation-for="Category_Id" class="text-danger"></span>
                             </div>
                         </div>
 
